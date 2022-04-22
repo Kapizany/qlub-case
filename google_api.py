@@ -25,5 +25,6 @@ def find_restaurant_by_city(city):
         else:
             next_page_token = res['next_page_token']
             time.sleep(time_sleep)
-
+    if not results:
+        raise ValidationErr("No restaurant found!", 400)
     return results

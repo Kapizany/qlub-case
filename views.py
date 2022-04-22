@@ -1,4 +1,5 @@
 from apiflask import APIBlueprint
+from flask import Response
 from flask.views import MethodView
 
 from google_api import find_restaurant_by_city
@@ -15,5 +16,8 @@ class Restaurants(MethodView):
     @views.input(InputGetRestaurantSchema, location="query")
     @views.output(OutputGetRestaurantSchema)
     def get(self, args):
-        restaurants_list = find_restaurant_by_city(city=args["city"])
-        return get_closest_restaurant(restaurants_list, args["lat"], args["long"])
+        try:
+            restaurants_list = find_restaurant_by_city(city=args["city"])
+            return get_closest_restaurant(restaurants_list, args["lat"], args["long"])
+        except Exception as err:
+            return Response(err.args[0], err.args[1])
